@@ -1,0 +1,225 @@
+In this challenge, you will be given a string. You must remove characters until the string is made up of any two alternating characters. When you choose a character to remove, all instances of that character must be removed. Your goal is to create the longest string possible that contains just two alternating letters.
+
+As an example, consider the string abaacdabd. If you delete the character a, you will be left with the string bcdbd. Now, removing the character c leaves you with a valid string bdbd having a length of 4. Removing either b or d at any point would not result in a valid string.
+
+Given a string , convert it to the longest possible string  made up only of alternating characters. Print the length of string  on a new line. If no string  can be formed, print  instead.
+
+Function Description
+
+Complete the alternate function in the editor below. It should return an integer that denotes the longest string that can be formed, or  if it cannot be done.
+
+alternate has the following parameter(s):
+
+s: a string
+Input Format
+
+The first line contains a single integer denoting the length of .
+The second line contains string .
+
+Constraints
+
+Output Format
+
+Print a single integer denoting the maximum length of  for the given ; if it is not possible to form string , print  instead.
+
+Sample Input
+
+10
+beabeefeab
+Sample Output
+
+5
+Explanation
+
+The characters present in  are a, b, e, and f. This means that  must consist of two of those characters and we must delete two others. Our choices for characters to leave are [a,b], [a,e], [a, f], [b, e], [b, f] and [e, f].
+
+If we delete e and f, the resulting string is babab. This is a valid  as there are only two distinct characters (a and b), and they are alternating within the string.
+
+If we delete a and f, the resulting string is bebeeeb. This is not a valid string  because there are consecutive e's present. Removing them would leave consecutive b's, so this fails to produce a valid string .
+
+Other cases are solved similarly.
+
+babab is the longest string we can create.
+
+//GOOD ALL TEST CASE RUN
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    // Complete the alternate function below.
+    static int alternate(String s) {
+       int max=0;
+if(s.length()==1)
+{
+ return 0;
+}
+for(char c='a';c<='z';c++)
+{
+    
+    for(char f='a'+1;f<='z';f++)
+    {
+        String temp="";
+        for(int i=0;i<s.length();i++)
+        {
+            if(s.charAt(i)==c)
+                temp+=c;
+            if(s.charAt(i)==f)
+                temp+=f;
+        }
+        if(temp.length()>=1)
+        {
+            int ff=1;
+            for(int j=0;j<temp.length()-1;j++)
+            {
+                if(temp.charAt(j)==temp.charAt(j+1))
+                {
+                    ff=0;
+                    break;
+                }
+            }
+            if(ff==1)
+            {
+                if(max<temp.length())
+                    max=temp.length();
+            }
+        }
+    }
+}
+   return max;
+
+    }
+      
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int l = Integer.parseInt(bufferedReader.readLine().trim());
+
+        String s = bufferedReader.readLine();
+
+        int result = alternate(s);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
+
+
+
+
+
+//NOT ALL TEST CASE RUN
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    // Complete the alternate function below.
+    static int alternate(String s) {
+        if(s.length()<=1)
+        return 0;
+        if(s.length()==2&&(s.charAt(0)!=s.charAt(1)))
+        return 2;
+           int x[] = new int [26];
+        char ch = ' ';
+        int a = 0, max = 0,  i = 0, j = 0, k = 0, z = 0;
+        String str = "";
+        for ( i = 0; i < s.length(); i++) {
+            ch = s.charAt(i);
+            a = (int)ch - 97;
+            x[a]++;
+        }
+        for ( i = 0; i < 26; i++) {
+            for ( j = i; j < 26; j++) {
+                if (i != j) {
+                    if (x[i] > 0 && x[j] > 0) {
+                        str = "";
+                        for ( k = 0; k < s.length(); k++) {
+                            ch = s.charAt(k);
+                            a = (int)ch - 97;
+                            if (a == i || a == j) {
+                                continue;
+                            } else
+                                str += ch;
+                        }
+
+
+                      
+                        z = fun(str);
+                      
+                        if (z > max)
+                            max = z;
+                    }
+                }
+            }
+        }
+       return max;
+
+    }
+      static int fun(String a) {
+        char ch1 = ' ', ch2 = ' ', ch3 = ' ';
+        int i = 0;
+        if(a.length()==1)
+        return 1;
+        ch1 = a.charAt(0);
+        ch2 = a.charAt(1);
+        if((a.length()==2)&&(ch1!=ch2))
+        return 2;
+        if (ch1 != ch2) {
+
+            for ( i = 2; i < a.length(); i++) {
+                ch3 = a.charAt(i);
+                if (i % 2 == 0) {
+                    if (ch3 != ch1)
+                        break;
+
+                } else {
+                    if (ch3 != ch2)
+                        break;
+                }
+
+            }
+            if (i == a.length()) {
+                return a.length();
+            } else
+
+                return -1;
+
+
+
+        }
+
+        return -1;
+
+    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int l = Integer.parseInt(bufferedReader.readLine().trim());
+
+        String s = bufferedReader.readLine();
+
+        int result = alternate(s);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
